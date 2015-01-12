@@ -1,5 +1,7 @@
 var helpers = require('./helpers');
 
+console.log('ENV: ' + console.log(process.env));
+
 if (!helpers.hasSvn()) {
     console.warn('#######################################################');
     console.warn('It is recommended you install svn for complete testing!');

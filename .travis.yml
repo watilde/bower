@@ -1,6 +1,9 @@
 env:
-  - NODE_VERSION=0.10
-  - NODE_VERSION=0.11
+  matrix:
+    - NODE_VERSION=0.10
+    - NODE_VERSION=0.11
+  global:
+    - STRICT_REQUIRE=1
 
 install:
   - test $TRAVIS_OS_NAME = "osx" && brew install nvm && source $(brew --prefix nvm)/nvm.sh || test $TRAVIS_OS_NAME = "linux"
@@ -18,6 +21,3 @@ matrix:
   allow_failures:
     - os: osx
     - env: "NODE_VERSION=0.11"
-
-script:
-  - grunt travis
