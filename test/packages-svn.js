@@ -9,6 +9,7 @@ var chalk = require('chalk');
 var cmd = require('../lib/util/cmd');
 var packages = require('./packages-svn.json');
 var nopt = require('nopt');
+var helpers = require('helpers');
 
 var options = nopt({
     'force': Boolean
@@ -42,7 +43,7 @@ function ensurePackage(admin, dir) {
         // Init svn repo
         .then(cmd.bind(null, 'svnadmin', ['create', admin]))
         // checkout the repo
-        .then(cmd.bind(null, 'svn', ['checkout', 'file://' + admin, dir]))
+        .then(cmd.bind(null, 'svn', ['checkout', helpers.localSource(admin), dir]))
         // create directory structure
         .then(cmd.bind(null, 'svn', ['mkdir', 'trunk'], { cwd: dir }))
         .then(cmd.bind(null, 'svn', ['mkdir', 'tags'], { cwd: dir }))
@@ -81,7 +82,7 @@ function checkRelease(dir, release) {
 
 function createRelease(admin, dir, release, files) {
     // checkout the repo
-    return cmd('svn', ['checkout', 'file://' + admin, dir])
+    return cmd('svn', ['checkout', helpers.localSource(admin), dir])
     // Attempt to delete branch, ignoring the error
     .then(function () {
         return cmd('svn', ['delete', dir + '/branches/' + release], { cwd: dir })
