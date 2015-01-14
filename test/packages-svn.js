@@ -9,7 +9,18 @@ var chalk = require('chalk');
 var cmd = require('../lib/util/cmd');
 var packages = require('./packages-svn.json');
 var nopt = require('nopt');
-var helpers = require('helpers');
+
+var helpers = {};
+
+helpers.localSource = function (localPath) {
+    localPath = path.normalize(localPath);
+
+    if (!exports.isWin()) {
+        localPath = 'file://' + localPath;
+    }
+
+    return localPath;
+};
 
 var options = nopt({
     'force': Boolean
