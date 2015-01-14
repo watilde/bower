@@ -13,7 +13,7 @@ var nopt = require('nopt');
 var helpers = {};
 
 helpers.localSource = function (localPath) {
-    localPath = path.normalize(localPath);
+    var localPath = path.normalize(localPath);
 
     if (!exports.isWin()) {
         localPath = 'file://' + localPath;

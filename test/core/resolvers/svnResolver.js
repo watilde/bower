@@ -1002,7 +1002,7 @@ else describe('SvnResolver', function () {
         it('should guess the name from the path', function () {
             var resolver;
 
-            resolver = create(helpers.localPath(testPackage));
+            resolver = create(helpers.localSource(testPackage));
             expect(resolver.getName()).to.equal('repo');
 
             resolver = create('svn+http://yii.googlecode.com/svn');
