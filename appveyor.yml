@@ -27,7 +27,7 @@ install:
   - git --version
   - svn --version
   # Install all dependencies
-  - npm install
+  - npm install --force
 
 # Post-install test scripts.
 test_script:
