@@ -9,19 +9,11 @@ var chalk = require('chalk');
 var cmd = require('../lib/util/cmd');
 var packages = require('./packages-svn.json');
 var nopt = require('nopt');
-
-var isWin = function() {
-    return process.platform === 'win32';
-};
+var fileUrl = require('file-url');
 
 var pathToUrl = function (localPath) {
     localPath = path.normalize(localPath);
-
-    if (!isWin()) {
-        localPath = 'file://' + localPath;
-    } else {
-        localPath = 'file:///' + localPath;
-    }
+    localPath = fileUrl(localPath);
 
     return localPath;
 };

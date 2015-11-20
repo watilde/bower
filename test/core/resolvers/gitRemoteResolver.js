@@ -8,6 +8,7 @@ var mout = require('mout');
 var multiline = require('multiline').stripIndent;
 var GitRemoteResolver = require('../../../lib/core/resolvers/GitRemoteResolver');
 var defaultConfig = require('../../../lib/config');
+var fileUrl = require('file-url');
 
 describe('GitRemoteResolver', function () {
     var testPackage = path.resolve(__dirname, '../../assets/package-a');
@@ -37,7 +38,7 @@ describe('GitRemoteResolver', function () {
         it('should guess the name from the path', function () {
             var resolver;
 
-            resolver = create('file://' + testPackage);
+            resolver = create(fileUrl(testPackage));
             expect(resolver.getName()).to.equal('package-a');
 
             resolver = create('git://github.com/twitter/bower.git');
@@ -53,7 +54,7 @@ describe('GitRemoteResolver', function () {
 
     describe('.resolve', function () {
         it('should checkout correctly if resolution is a branch', function (next) {
-            var resolver = create({ source: 'file://' + testPackage, target: 'some-branch' });
+            var resolver = create({ source: fileUrl(testPackage), target: 'some-branch' });
 
             resolver.resolve()
             .then(function (dir) {
@@ -75,7 +76,7 @@ describe('GitRemoteResolver', function () {
         });
 
         it('should checkout correctly if resolution is a tag', function (next) {
-            var resolver = create({ source: 'file://' + testPackage, target: '~0.0.1' });
+            var resolver = create({ source: fileUrl(testPackage), target: '~0.0.1' });
 
             resolver.resolve()
             .then(function (dir) {
@@ -93,7 +94,7 @@ describe('GitRemoteResolver', function () {
         });
 
         it('should checkout correctly if resolution is a commit', function (next) {
-            var resolver = create({ source: 'file://' + testPackage, target: 'bdf51ece75e20cf404e49286727b7e92d33e9ad0' });
+            var resolver = create({ source: fileUrl(testPackage), target: 'bdf51ece75e20cf404e49286727b7e92d33e9ad0' });
 
             resolver.resolve()
             .then(function (dir) {
@@ -204,7 +205,7 @@ describe('GitRemoteResolver', function () {
         afterEach(clearResolverRuntimeCache);
 
         it('should resolve to the references of the remote repository', function (next) {
-            GitRemoteResolver.refs('file://' + testPackage)
+            GitRemoteResolver.refs(fileUrl(testPackage))
             .then(function (refs) {
                 // Remove master and test only for the first 7 refs
                 refs = refs.slice(1, 8);
@@ -224,7 +225,7 @@ describe('GitRemoteResolver', function () {
         });
 
         it('should cache the results', function (next) {
-            var source = 'file://' + testPackage;
+            var source = fileUrl(testPackage);
 
             GitRemoteResolver.refs(source)
             .then(function () {
@@ -232,7 +233,7 @@ describe('GitRemoteResolver', function () {
                 GitRemoteResolver._cache.refs.get(source).splice(0, 1);
 
                 // Check if it resolver to the same array
-                return GitRemoteResolver.refs('file://' + testPackage);
+                return GitRemoteResolver.refs(fileUrl(testPackage));
             })
             .then(function (refs) {
                 // Test only for the first 7 refs

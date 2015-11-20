@@ -6,6 +6,7 @@ var Logger = require('bower-logger');
 var GitRemoteResolver  = require('../../../lib/core/resolvers/GitRemoteResolver');
 var GitHubResolver = require('../../../lib/core/resolvers/GitHubResolver');
 var defaultConfig = require('../../../lib/config');
+var fileUrl = require('file-url');
 
 describe('GitHub', function () {
     var logger;
@@ -87,8 +88,7 @@ describe('GitHub', function () {
 
             resolver = create({ source: 'git://github.com/IndigoUnited/js-events-emitter.git', target: '0.1.0' });
 
-            // Monkey patch source to file://
-            resolver._source = 'file://' + testPackage;
+            resolver._source = fileUrl(testPackage);
 
             resolver.resolve()
             .then(function (dir) {
@@ -119,9 +119,7 @@ describe('GitHub', function () {
 
             resolver = create({ source: 'git://github.com/IndigoUnited/js-events-emitter.git', target: '0.1.0' });
 
-            // Monkey patch source to file://
-            resolver._source = (process.platform === 'win32') ? '' : 'file://';
-            resolver._source += testPackage;
+            resolver._source = fileUrl(testPackage);
 
             resolver.resolve()
             .then(function (dir) {
@@ -144,8 +142,7 @@ describe('GitHub', function () {
                 return originalCheckout.apply(this, arguments);
             };
 
-            // Monkey patch source to file://
-            resolver._source = 'file://' + testPackage;
+            resolver._source = fileUrl(testPackage);
 
             resolver.resolve()
             .then(function (dir) {

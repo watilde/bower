@@ -14,6 +14,7 @@ var path = require('path');
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 var spawnSync = require('spawn-sync');
 var config = require('../lib/config');
+var fileUrl = require('file-url');
 
 // For better promise errors
 Q.longStackSupport = true;
@@ -278,10 +279,8 @@ exports.isWin = function() {
 
 exports.localSource = function (localPath) {
     localPath = path.normalize(localPath);
+    localPath = fileUrl(localPath);
 
-    if (!exports.isWin()) {
-        localPath = 'file://' + localPath;
-    }
 
     return localPath;
 };
@@ -289,12 +288,7 @@ exports.localSource = function (localPath) {
 // Used for example by "svn checkout" and "svn export"
 exports.localUrl = function (localPath) {
     localPath = path.normalize(localPath);
-
-    if (!exports.isWin()) {
-        localPath = 'file://' + localPath;
-    } else {
-        localPath = 'file:///' + localPath;
-    }
+    localPath = fileUrl(localPath);
 
     return localPath;
 };
