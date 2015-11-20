@@ -120,7 +120,8 @@ describe('GitHub', function () {
             resolver = create({ source: 'git://github.com/IndigoUnited/js-events-emitter.git', target: '0.1.0' });
 
             // Monkey patch source to file://
-            resolver._source = 'file://' + testPackage;
+            resolver._source = (process.platform === 'win32') ? '' : 'file://';
+            resolver._source += testPackage;
 
             resolver.resolve()
             .then(function (dir) {
