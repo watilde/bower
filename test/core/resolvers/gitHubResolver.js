@@ -88,7 +88,7 @@ describe('GitHub', function () {
 
             resolver = create({ source: 'git://github.com/IndigoUnited/js-events-emitter.git', target: '0.1.0' });
 
-            resolver._source = 'file://' + testPackage;
+            resolver._source = 'file://' + testPackage.replace('/', '\\');
 
             resolver.resolve()
             .then(function (dir) {
